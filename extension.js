@@ -151,6 +151,19 @@ function enable() {
                 this._workspaces[i].showTooltip();
             return true;
         }
+        if(o.get_key_symbol() == Clutter.KEY_Down){
+        	let workspace = this._workspaces[(global.screen.get_active_workspace_index()+1)%this._workspaces.length];
+            if (workspace !== undefined)
+                workspace.metaWorkspace.activate(global.get_current_time());
+        }
+        if(o.get_key_symbol() == Clutter.KEY_Up){
+        	let index = global.screen.get_active_workspace_index()-1;
+        	if (index < 0) index = this._workspaces.length-1;
+        	let workspace = this._workspaces[index];
+            if (workspace !== undefined)
+                workspace.metaWorkspace.activate(global.get_current_time());
+        }
+        global.log(o.get_key_symbol() + " " + Clutter.KEY_Down);
         if (o.get_key_symbol() == Clutter.KEY_Return){
         	Main.overview.hide();
         }
