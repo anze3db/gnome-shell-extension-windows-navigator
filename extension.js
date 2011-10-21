@@ -151,6 +151,9 @@ function enable() {
                 this._workspaces[i].showTooltip();
             return true;
         }
+        if (o.get_key_symbol() == Clutter.KEY_Return){
+        	Main.overview.hide();
+        }
 
         if (global.stage.get_key_focus() != global.stage)
             return false;
