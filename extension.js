@@ -163,11 +163,55 @@ function enable() {
             if (workspace !== undefined)
                 workspace.metaWorkspace.activate(global.get_current_time());
         }
-        global.log(o.get_key_symbol() + " " + Clutter.KEY_Down);
-        if (o.get_key_symbol() == Clutter.KEY_Return){
-        	Main.overview.hide();
+        if(o.get_key_symbol() == Clutter.KEY_Right){
+        	
+
+        	let index = global.screen.get_active_workspace_index();
+        	let overlays = this._workspaces[index]._windowOverlays;
+        	
+        	for(let i in overlays){
+        		if(overlays[i].closeButton.get_paint_visibility()){
+        			this._currentWindow = i;
+        		}
+        		overlays[i].closeButton.hide();
+        	}
+        	this._currentWindow = this._currentWindow || 0;
+        	this._currentWindow = (this._currentWindow += 1) % overlays.length;
+        	overlays[this._currentWindow].closeButton.show();
+
+        }
+        if(o.get_key_symbol() == Clutter.KEY_Left){
+
+        	let index = global.screen.get_active_workspace_index();
+        	let overlays = this._workspaces[index]._windowOverlays;
+
+        	for(let i in overlays){
+        		if(overlays[i].closeButton.get_paint_visibility()){
+        			this._currentWindow = i;
+        		}
+        		overlays[i].closeButton.hide();
+        	}
+        	this._currentWindow = this._currentWindow || 0;
+        	this._currentWindow = (this._currentWindow -= 1)
+        	if (this._currentWindow < 0) this._currentWindow = overlays.length - 1;
+        	overlays[this._currentWindow].closeButton.show();
         }
 
+        if (o.get_key_symbol() == Clutter.KEY_Return){
+        	
+
+        	if ('undefined' != typeof  this._currentWindow){
+        		global.log("AAa" + this._currentWindow)
+        		let win = this._workspaces[global.screen.get_active_workspace_index()]._windowOverlays[this._currentWindow]._windowClone.metaWindow;
+                global.log(win);
+        		this._hideTooltips();
+                if (win)
+                    Main.activateWindow(win, global.get_current_time());
+        	}
+        	else{
+        		Main.overview.hide();
+        	}
+        }
         if (global.stage.get_key_focus() != global.stage)
             return false;
 
